@@ -71,7 +71,7 @@ const config: Config = {
     navbar: {
       title: 'Convex Docs',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'Convex Logo',
         src: 'img/Convex.png',
       },
       items: [
@@ -99,6 +99,10 @@ const config: Config = {
               label: 'Tutorial',
               to: '/docs/intro',
             },
+            {
+              label: 'CADs',
+              to: '/cad/cads',
+            }
           ],
         },
         {
