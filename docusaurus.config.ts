@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 const config: Config = {
   title: 'Convex Design and Documentation',
   tagline: 'Home of lattice technology',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/Convex.png',
 
   // Set the production url of your site here
   url: 'https://docs.convex.world',
@@ -15,8 +15,11 @@ const config: Config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'Convex-Dev', // Usually your GitHub org/user name.
+  projectName: 'design', // Usually your repo name.
+
+  // Recommended for GitHub pages
+  trailingSlash: false,
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -66,10 +69,10 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
-      title: 'My Site',
+      title: 'Convex Docs',
       logo: {
         alt: 'My Site Logo',
-        src: 'img/logo.svg',
+        src: 'img/Convex.png',
       },
       items: [
         {
@@ -80,7 +83,7 @@ const config: Config = {
         },
         {to: '/blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/facebook/docusaurus',
+          href: 'https://github.com/Convex-Dev/design',
           label: 'GitHub',
           position: 'right',
         },
