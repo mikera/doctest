@@ -2,9 +2,14 @@
 
 ## Overview 
 
-Frequently, events that occur on-chain such as invocations of smart contracts need to send messages to external users beyond the immediate results of the transactions.
+Convex provides a verifiable event log for on-chain events.
 
-This CAD describes a CVM based system for event logging that allows messages to be explicitly emitted during execution of CVM code, and reported by peers in interested parties.
+The log is designed for events that may be consumed / observed by external observers interested in meaningful events in the CVM state. Typical use cases include:
+- Detecting transactions that represent transfers of assets to / from a specific account
+- Notifying observers of availability of smart contracts, e.g. opening of an auction
+- Alerting external observers to situations that may require action
+
+This CAD describes the CVM based system for event logging that allows messages to be explicitly emitted during execution of CVM code, and reported by peers in interested parties.
 
 Example use cases:
 - A trader monitoring price changes in a market
@@ -23,7 +28,11 @@ It is possible for a peer to be instrumented to detect and register events of in
 
 ### The `log` function
 
-Events are emitted via the CVM `log` runtime function
+Events are emitted via builtin CVM `log` function which adds a log entry for the current transaction.
+
+```clojure
+(log val1 val2 val3 ....)
+```
 
 As an example, a decentralised auction house might choose to log when items are sold with this folloing code
 
@@ -36,7 +45,17 @@ Other than the juice cost for the `log` instruction, logging has no effect on CV
 
 ### Log Record
 
-For each `log` statement successfully executed, the CVM produces a `log` Record, which is a Vector with the following fields:
+### Log entries
+
+A log entry consists of:
+- The `*address*` that caused the `log` entry to be created (never nil)
+- The `*scope*` present at the time of logging (may be `nil`)
+- The location of the transaction, as a `[block-number transaction-number]` pair
+- A vector of the values logged
+
+```clojure
+[address scope location [val1 val2 val3 ...]]
+```
 
 #### Position 0 : Address
 
@@ -66,19 +85,57 @@ Log data SHOULD be structured according to application requirements and consiste
 
 Conventionally, the first element of the log data SHOULD be a Keyword that describes the type of event e.g. `:TRANSFER`
 
+### Interaction with rollbacks
+
+The log MUST NOT be apdated with any log entries created within code that was rolled back (either due to an explicit `rollback` or failure of some atomic expression or transaction).
+
+The reason for this is that the Log should only include *things that happened* rather than any operations that are rolled back.
+
+The log SHOULD NOT be used for error reporting or diagnostics. 
+
+### Conventional values
+
+Users of logging capabilities MAY log any values they wish. However by convention, and in order to facilitate standards in tool, the following conventions are recommended.
+
+The first log entry SHOULD by a short uppercase string value that describes the type of event. Common codes are:
+
+- "TR" = a transfer of an asset
+- "ALERT" = a warning that external action may be needed
+
+#### Transfers
+
+The standard values for a transfer "TR" log event are:
+
+```clojure
+["TR" sender receiver quantity data]
+```
+
+Where:
+- `sender` is the account address of the asset sender
+- `receiver` is the account address of the receiver
+- `quantity` is the quantity of the asset transferred, as per CAD19
+- `data` is any additional data attached to the transfer (e.g. a map containing a payment reference)
+
+Transfer events of this type SHOULD be emitted by the actor implementing the asset, with a `*scope*` set as appropriate.
 
 ### Log Indexing
 
-Peers SHOULD index log records for efficient access any query by interested parties
-
-Peers SHOULD produce and retain the following indexes at minimum:
-
-- An index on block + transaction index, enabling sequential access to the log events for each transaction in order.
-- An index on the each of the first 4 fields of the log data, if these are Blob Like values that can be indexed
-
-Indexes SHOULD map the index key to a vector of log positions, so that the relevant Log Record(s) can be efficiently retrieved in order.
+Peers SHOULD index log records for efficient access any query by interested parties.
 
 The exact structure of log indexes are implementation details left to the peer operator.
+
+By default peers SHOULD maintain the following indexes into the log, for all log entries that they retain:
+- block -> log start and end position (allows fast location of log entries for a given block)
+- [ address | first value | second value | third value ] -> vector of log positions
+- An index on the each of the first 4 fields of the log data, if these are Blob Like values that can be indexed
+
+Values are included in the index if present and bloblike, otherwise empty blob. 
+
+Peers MAY maintain additional indexes as relevant for their users.
+
+The following lookup paths may also enable efficient access to relevant information:
+- Log entry -> block -> transaction -> transaction details (e.g. `*origin*`)
+- Log entry -> block -> historical state -> state after block completion (includes `*timestamp*` etc.)
 
 ### Execution fees
 
@@ -89,13 +146,27 @@ The cost of a `log` operation is:
 
 The outputs of `log` are not stored in the CVM State, so this has no direct effect on memory size
 
-### Log Output
+### Log Data
 
-Peers MUST compute the following 
+The log is a flat Vector of all log entries of all blocks up to the current consensus point.
 
-### Retention policies
+### Juice
+
+The `log` function consumes juice proportional to the memory size of the logged data.
+
+This juice cost represents the cost imposed on peers for maintaining log entries, and prevents DoS attacks by methods such as including extremely large data structures as log values.
+
+### Retention
 
 Peers MAY determine their own retention policy for historical log records.
 
+Peers MUST maintain logs for at least one month, for the purpioses of transaction confirmation by clients and recipients.
+
 It is RECOMMENDED that Peers retain at least 1 year of log records.
+
+Peers SHOULD maintain logs for as long as possible given resource availability (primarily storage and indexing costs).
+
+
+
+
 
