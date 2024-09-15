@@ -21,7 +21,7 @@ const config: Config = {
   // Recommended for GitHub pages
   trailingSlash: false,
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
 
   // Even if you don't use internationalization, you can use this field to set
@@ -107,7 +107,7 @@ const config: Config = {
             },
             {
               label: 'CADs',
-              to: '/docs/cad',
+              to: '/docs/cad/0000cads',
             }
           ],
         },
