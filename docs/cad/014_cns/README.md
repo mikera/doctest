@@ -1,4 +1,4 @@
-# Convex Name System
+# CAD014: Convex Name System
 
 The Convex name system (CNS) is a globally accessible naming service available on the CVM.
 

@@ -1,4 +1,4 @@
-# Error Handling
+# CAD011: Error Handling
 
 Error handling is a critical feature of all good code, and therefore requires special consideration on the CVM.
 

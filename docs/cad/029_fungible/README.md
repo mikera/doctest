@@ -1,4 +1,4 @@
-# Fungible Token Standard
+# CAD029: Fungible Token Standard
 
 Fungible tokens are an important class of digital assets, that share the property of being fully fungible, i.e. any unit of a balance of the asset is equivalent to any other unit.
 

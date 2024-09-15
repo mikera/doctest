@@ -1,14 +1,12 @@
-# Metadata
+# CAD013: Metadata
 
 ## Overview
 
-The CVM provides a powerful facility for attaching a metadata map to a defined symbol. The purpose of metadata is to provide any information on a defined symbol regardless of the
-concrete value this symbol holds.
+The CVM provides a powerful facility for attaching a metadata map to a defined symbol. The purpose of metadata is to provide any information on a defined symbol independent of the value this symbol holds.
 
-Some metadata information, if specified, MUST follow a particular structure for external purposes. For instance, this CAD describes how to document a symbol by following an
-expected structure.
+Some metadata information, if specified, MUST follow a particular structure for external purposes. For instance, this CAD describes how to document a symbol by following an expected structure.
 
-Other information CAN follow any arbitrary structure.
+Other information in metadata CAN follow any arbitrary structure. Creators of such SHOULD collaborate with the community to establish useful standards where appropriate (which may include updates to this CAD)
 
 ## Usage
 

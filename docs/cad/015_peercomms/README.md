@@ -1,8 +1,8 @@
-# Peer Communications
+# CAD015: Peer Communications
 
 ## Overview
 
-Peers in Convex need to communicate certain messages to ensure the effective running of the protocol. This CAD describes peer messaging as required to implement the protocol.
+Peers in Convex need to communicate certain messages to ensure the effective running of the protocol and communication with binary clients. This CAD describes peer-to-peer messaging as required to implement the protocol.
 
 Objectives:
 

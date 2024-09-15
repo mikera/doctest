@@ -1,4 +1,4 @@
-# Torus DEX
+# CAD030: Torus DEX
 
 Torus is a decentralised exchange (DEX) built on Convex. It is an open source actor that operates by facilitating smart contract interactions between:
 - Liquidity providers, who earn commission on trades

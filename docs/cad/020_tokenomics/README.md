@@ -1,4 +1,4 @@
-# Tokenomics
+# CAD020: Tokenomics
 
 ## IMPORTANT LEGAL NOTICE
 
