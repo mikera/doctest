@@ -4,9 +4,10 @@
 
 Transactions are instructions to the Convex Network submitted by users.
 
-Transactions SHOULD be instructions that a user wishes to see executed and reflected in the global state. Typical examples might be:
+Transactions SHOULD be instructions that a user wishes to have executed and reflected in the global state. Typical examples might be:
 - Transfer of a digital asset from one account to another
-- Executing a trade of one asset for another via a smart contract
+- Executing a smart contract
+- Updating an on-chain database record
 - Deploying or upgrading CVM code
 - Voting in a decentralised governance process 
 - Registering a hash that can be used to identify and validate off-chain content (e.g. on the [Data Lattice](../024_data_lattice/README.md) )
@@ -105,6 +106,7 @@ Transaction results MUST be returned in a `Result` record which contains the fol
 - `:id` - the message ID of the transaction to correlate with the client
 - `:result` - the final result of the transaction (will be the error message if an error occurred)
 - `:error` - the error code (MUST `nil` if no error occurred, otherwise can be any Keyword)
+- `:log` - a vector of log entries cerated (may be omitted if no logs events occurred)
 - `:info` - a Map of information reported by the peer to the client, which SHOULD include:
  - `:tx` - the 32-byte SHA3-256 hash of the signed transaction
  - `:loc` - the location of the transaction in consensus, as a vector `[block-index transaction-index]`
@@ -113,6 +115,7 @@ Transaction results MUST be returned in a `Result` record which contains the fol
  - `:mem` - Integer amount of memory consumed by the transaction (may be omitted if zero, may be negative for a refund)
  - `:juice` - Execution juice for the transaction
  - `:fees` - Total fee paid in Convex coppers, including memory cost
+ - `:source` - The source location at which the Result was generated 
 
 An an optimisation, peers MAY avoid creating `Result` records if they have no requirement to report results back to clients.
 
@@ -157,10 +160,10 @@ Peers SHOULD submit transactions in the order that they are received from any si
 
 Peers SHOULD validate the digital signature of transactions they include in a block. Failure to do so is likely to result in penalties (at a minimum, paying the fees for the invalid transaction) 
 
-Peers MAY reject transactions that do not appear to be legitimate, in which case the Peer SHOULD return a Result to the Client submitting the transaction indicating the reason for rejection. Some examples where this may be appropriate:
+Peers MAY reject transactions that do not appear to be legitimate, in which case the Peer MUST return a Result to the Client submitting the transaction indicating the reason for rejection. Some examples where this may be appropriate:
 - Any transaction that has an obviously invalid sequence number (less than that required for the current Consensus State)
 - A transaction that has a future Sequence number (greater than would be valid for the current consensus), and the Peer is unaware of any previous in-flight transactions from the Client that would make this valid.
-- A transaction that appears too expensive for the origin account for which it is submitted to execute (a very large transaction size or a large transfer that would be likely to fail)
+- A transaction that appears too expensive for its origin account to execute (a very large transaction size or a large transfer that would be likely to fail)
 - An account or client has been blacklisted by the Peer for previous bad behaviour
 
 ## Signatures

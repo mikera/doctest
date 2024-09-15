@@ -2,11 +2,13 @@
 
 ## Overview
 
-Operating a Peer is an important responsibility in the Convex Network. 
+Operating a peer is an important responsibility in the Convex Network. 
 
-Anyone can run a Peer, and they are responsible for maintaining the Consensus of the Network. However, most users of the Convex Network do not need to run a Peers - they connect to Peers via Clients of the network that submit Transactions and query information on their Behalf
+Anyone can run a peer, and they are responsible for maintaining the Consensus of the Network. 
 
-This document primarily contains recommendations for Peer Operators
+Most users of the Convex Network do not need to run a peer - they connect to peers via clients software that submits transactions and queries information on their behalf. 
+
+This document primarily contains recommendations for peer operators
 
 ## Requirements
 
@@ -31,8 +33,7 @@ The DNS entry is optional, but it will help significantly with discoverability /
 
 ### Peer Config
 
-Peers can be configured at launch 
-
+Peers can be configured at launch in various ways.
 
 Peers SHOULD configure the number of concurrent outgoing Peer connections according to their available bandwidth. 20 recommended for Peers with fast connections.
 
@@ -51,9 +52,9 @@ Peers SHOULD configure the number of concurrent outgoing Peer connections accord
 
 ### Network Partitions
 
-It may occur that the Peer becomes temporarily disconnected from the Peer Network.
+It may occur that a peer becomes temporarily disconnected from the peer network.
 
-Peers are designed to automatically recover from temporary network failure and re-establish connections when possible. Peers with default configuration will periodically re-attempt to connect with other Peers randomly until connection with the Network is re-established.
+Peers are designed to automatically recover from temporary network failure and re-establish connections when possible. Peers with normal configuration SHOULD periodically re-attempt to connect with other peers randomly until connection with the Network is re-established.
 
 Peer Operators SHOULD provide for an alternative way to connect to the main network, if only for the purposes of withrawing the Peer's Stake (Peers are at risk of penalisation if they remain disconnected for too long).
 
