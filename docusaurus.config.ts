@@ -4,7 +4,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'Convex',
-  tagline: 'Home of lattice technology',
+  tagline: 'Home of Lattice Technology',
   favicon: 'img/Convex.png',
 
   // Set the production url of your site here
