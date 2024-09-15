@@ -3,7 +3,7 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  title: 'Convex Design and Documentation',
+  title: 'Convex',
   tagline: 'Home of lattice technology',
   favicon: 'img/Convex.png',
 
