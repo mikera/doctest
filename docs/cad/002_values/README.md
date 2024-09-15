@@ -1,4 +1,4 @@
-# CVM Values
+# CAD002: CVM Values
 
 Convex uses a special representation of information values within the CVM, across the data lattice and to support the Convergent Proof Of Stake Consensus. 
 

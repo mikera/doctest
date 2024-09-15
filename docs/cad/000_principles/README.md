@@ -1,6 +1,29 @@
-# Design Principles
+# CAD000: Design Principles
 
 This document details general design and engineering principles deployed in the implementation and documentation of Convex.
+
+## Technical Principles
+
+### Values are Immutable
+
+We adopt immutability as a standard principle for all values in Convex. Immutability is important for several reasons:
+
+- Enables hash codes to be used for value identity (value IDs) - essential for content-addressable storage
+- Enables structural sharing in persistent data structures
+- Easier to reason about immutable values, especially with pure functions
+- Better suited for concurrency
+
+Mutability in implementations is permitted (e.g. a mutable cached value for performance reasons), however such mutability should not be externally visible (e.g. should not affect the Encoding of Values). 
+
+An important presentation on the topic: https://www.infoq.com/presentations/Value-Values/
+
+### Bounded Resources
+
+We are building a system for distibuted computation and data in the context of a global internet where many parties with access to the Convex network may be untrusted.
+
+It is therefore necessary to place a bound on the size of resources used. This is essential to ensure that the CVM does not ever attempt to process data of unbounded size, which could allow DoS attacks by adversaries constructing arbitrarily sized input.
+
+Where input to Convex may be effectively unbounded (e.g. the size of data structures such as Vectors), implementations MUST NOT attempt O(n) or greater operations on such structures unless these operations are protected by resource constraints (e.g. accounting for juice costs, memory allowances). 
 
 ## General Design Philosophy
 
@@ -39,30 +62,11 @@ We can add functionality, we can't remove it (at least in released versions of C
 
 This principle also applies to error conditions. We can permissibly turn a failure into a success (e.g. defining a function that was previously undeclared) but cannot turn a success into a failure (e.g. removing a core function).
 
-### Values are Immutable
-
-We adopt immutability as a standard principle for all values in Convex. Immutability is important for several reasons:
-
-- Enables hash codes to be used for value identity (value IDs) - essential for content-addressable storage
-- Enables structural sharing in persistent data structures
-- Easier to reason about immutable values, especially with pure functions
-- Better suited for concurrency
-
-Mutability in implementations is permitted (e.g. a mutable cached value for performance reasons), however such mutability should not be externally visible (e.g. should not affect the Encoding of Values). 
-
-An important presentation on the topic: https://www.infoq.com/presentations/Value-Values/
-
 ### Favour Explicit over Implicit
 
 We prefer to avoid implicit behaviour, and generally require operations to be explicitly requested. It is better to throw an Error rather than having implicit behaviour (which creates implementation complexity and may not be what the user intended).
 
 This principle manifests, for example, in the idea that most functions should avoid performing implicit casts between different Types. If a user wants a value to be cast to a different type, they should specify it explicitly, e.g. `(+ 1 (long 0x1234))` works but `(+ 1 0x1234)` should not.
-
-### Bounded Resources
-
-In most cases, it is necessary to place a bound on the size of resources used. This is essential to ensure that the CVM does not ever attempt to process data of unbounded size, which could allow DoS attacks by adversaries constructing arbitrarily sized input.
-
-Where CVM input may be effectively unbounded (e.g. the size of data structures such as Vectors), the CVM MUST never attempt O(n) or greater operations on such structures unless these operations are protected by resource constraints (e.g. accounting for juice costs, memory allowances). 
 
 ### Avoid Scope Creep
 
